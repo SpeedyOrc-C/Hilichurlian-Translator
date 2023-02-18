@@ -7,12 +7,12 @@ import Hilichurlian.Structure
       Phrase(Phrase),
       Sentence(VerbSentence),
       Verb(Verb),
-      VerbPhrase(VerbTransitivePhrase) )
+      VerbPhrase(VerbTransitivePhrase, VerbTransitive2ObjPhrase), AdjectivePhrase (AdjectivePhrase), Adjective (Adjective) )
 
 
 type LexicalDictionary = [(String, [String])]
 
-iLoveYou =
+iLoveYou = -- Mi muhe ye.
     VerbSentence
         (DeterminatePhrase
             (NounPhrase
@@ -27,6 +27,34 @@ iLoveYou =
             (NounPhrase
                 (Noun (Phrase ["ye"]))
                 Nothing
+                Nothing
+            )
+            Nothing
+        )
+
+iGiveYouARedFruit = -- Mi mani ye gusha celi boya.
+    VerbSentence
+        (DeterminatePhrase
+            (NounPhrase
+                (Noun (Phrase ["mi"]))
+                Nothing
+                Nothing
+            )
+            Nothing
+        )
+        (VerbTransitive2ObjPhrase
+            (Verb (Phrase ["mani"]))
+            (NounPhrase
+                (Noun (Phrase ["ye"]))
+                Nothing
+                Nothing
+            )
+            (NounPhrase
+                (Noun (Phrase ["gusha"]))
+                (Just (AdjectivePhrase
+                    (Adjective (Phrase ["celi", "boya"]))
+                    Nothing
+                ))
                 Nothing
             )
             Nothing

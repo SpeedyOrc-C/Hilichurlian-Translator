@@ -33,6 +33,55 @@ instance Show Sentence where
         ")"
 
 
+data VerbPhrase
+    = VerbIntransitivePhrase
+        Verb
+        (Maybe Adverb)
+    | VerbTransitivePhrase
+        Verb
+        NounPhrase
+        (Maybe Adverb)
+    | VerbTransitive2ObjPhrase
+        Verb
+        NounPhrase
+        NounPhrase
+        (Maybe Adverb)
+    | VerbRecursivePhrase
+        Verb
+        Sentence
+        (Maybe Adverb)
+    deriving (Eq)
+
+instance Show VerbPhrase where
+    show (VerbIntransitivePhrase verb maybeAdverb) =
+        "VP(" ++
+        show verb ++
+        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
+        ")"
+
+    show (VerbTransitivePhrase verb nounPhrase maybeAdverb) =
+        "VP(" ++
+        show verb ++ ", " ++
+        show nounPhrase ++
+        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
+        ")"
+
+    show (VerbTransitive2ObjPhrase verb nounPhrase nounPhrase' maybeAdverb) =
+        "VP(" ++
+        show verb ++ ", " ++
+        show nounPhrase ++ ", " ++
+        show nounPhrase' ++
+        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
+        ")"
+
+    show (VerbRecursivePhrase verb sentence maybeAdverb) =
+        "VP(" ++
+        show verb ++ ", " ++
+        show sentence ++
+        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
+        ")"
+
+
 data PredicativePhrase
     = DeterminatePredicate
         DeterminatePhrase
@@ -106,55 +155,6 @@ instance Show DeterminatePhrase where
         "DP(" ++
         show nounPhrase ++
         maybe "" (\x -> ", " ++ show x) maybeDeterminer ++
-        ")"
-
-
-data VerbPhrase
-    = VerbIntransitivePhrase
-        Verb
-        (Maybe Adverb)
-    | VerbTransitivePhrase
-        Verb
-        NounPhrase
-        (Maybe Adverb)
-    | VerbTransitive2ObjPhrase
-        Verb
-        NounPhrase
-        NounPhrase
-        (Maybe Adverb)
-    | VerbRecursivePhrase
-        Verb
-        Sentence
-        (Maybe Adverb)
-    deriving (Eq)
-
-instance Show VerbPhrase where
-    show (VerbIntransitivePhrase verb maybeAdverb) =
-        "VP(" ++
-        show verb ++
-        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
-        ")"
-
-    show (VerbTransitivePhrase verb nounPhrase maybeAdverb) =
-        "VP(" ++
-        show verb ++ ", " ++
-        show nounPhrase ++
-        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
-        ")"
-
-    show (VerbTransitive2ObjPhrase verb nounPhrase nounPhrase' maybeAdverb) =
-        "VP(" ++
-        show verb ++ ", " ++
-        show nounPhrase ++ ", " ++
-        show nounPhrase' ++
-        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
-        ")"
-
-    show (VerbRecursivePhrase verb sentence maybeAdverb) =
-        "VP(" ++
-        show verb ++ ", " ++
-        show sentence ++
-        maybe "" (\x -> ", " ++ show x) maybeAdverb ++
         ")"
     
 {-
