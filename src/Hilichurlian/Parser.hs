@@ -74,8 +74,10 @@ isDeterminer = (`elem` allDeterminers)
 isObject :: [String] -> Bool
 isObject = (`elem` allObject)
 
-nounPhraseIsObject :: NounPhrase -> Bool
-nounPhraseIsObject (NounPhrase (Noun (Phrase noun)) _ _) = isObject noun
+determinatePhraseIsObject :: DeterminatePhrase -> Bool
+determinatePhraseIsObject
+    (DeterminatePhrase (NounPhrase (Noun (Phrase noun)) _ _) _) =
+        isObject noun
 
 isSubjectTransitive :: [String] -> Bool
 isSubjectTransitive = (`elem` allSubjectTransitive)
@@ -243,17 +245,19 @@ parseVerbTransitivePhrase (Phrase phrase) = nub $ do
     ~(left, right) <- split2 phrase
     verb <- parseTransitiveVerb (Phrase left)
     ~(left', right') <- split2e right
-    nounPhrase <- filter nounPhraseIsObject $ parseNounPhrase (Phrase left')
+    determinatePhrase <-
+        filter determinatePhraseIsObject $
+            parseDeterminatePhrase (Phrase left')
     if null right' then
         return $ VerbTransitivePhrase
             verb
-            nounPhrase
+            determinatePhrase
             Nothing
     else do
         adverb <- parseAdverb (Phrase right')
         return $ VerbTransitivePhrase
             verb
-            nounPhrase
+            determinatePhrase
             (Just adverb)
 
 parseVerbTransitive2ObjPhrase :: Parser VerbPhrase
@@ -261,9 +265,11 @@ parseVerbTransitive2ObjPhrase (Phrase phrase) = nub $ do
     ~(left, right) <- split2 phrase
     verb <- parseTransitive2ObjVerb (Phrase left)
     ~(left', right') <- split2 right
-    nounPhrase <- filter nounPhraseIsObject $ parseNounPhrase (Phrase left')
+    nounPhrase <- filter determinatePhraseIsObject $
+        parseDeterminatePhrase (Phrase left')
     ~(left'', right'') <- split2e right'
-    nounPhrase' <- filter nounPhraseIsObject $ parseNounPhrase (Phrase left'')
+    nounPhrase' <- filter determinatePhraseIsObject $
+        parseDeterminatePhrase (Phrase left'')
     if null right'' then
         return $ VerbTransitive2ObjPhrase
             verb

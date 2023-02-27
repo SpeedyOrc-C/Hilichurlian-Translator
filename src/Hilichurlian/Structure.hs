@@ -39,12 +39,12 @@ data VerbPhrase
         (Maybe Adverb)
     | VerbTransitivePhrase
         Verb
-        NounPhrase
+        DeterminatePhrase
         (Maybe Adverb)
     | VerbTransitive2ObjPhrase
         Verb
-        NounPhrase
-        NounPhrase
+        DeterminatePhrase
+        DeterminatePhrase
         (Maybe Adverb)
     | VerbRecursivePhrase
         Verb
