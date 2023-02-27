@@ -1,4 +1,6 @@
-# Hilichurlian Translator
+# Mito Yeye
+
+[English](README-en.md) | 简体中文
 
 ## 简介
 
