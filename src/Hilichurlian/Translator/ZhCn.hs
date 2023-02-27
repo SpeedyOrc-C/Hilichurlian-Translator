@@ -7,7 +7,7 @@ import Hilichurlian.Structure
       Phrase(..),
       Sentence(..),
       Verb(..),
-      VerbPhrase(..), Adverb (..), AdjectivePhrase (..), Adjective (..), Determiner (..) )
+      VerbPhrase(..), Adverb (..), AdjectivePhrase (..), Adjective (..), Determiner (..), PredicativePhrase (..) )
 import Hilichurlian.Translator.LexicalDictionary
 
 import Data.Maybe (fromMaybe)
@@ -17,12 +17,14 @@ nounDictionary :: LexicalDictionary
 nounDictionary = [
         ("gusha", ["草", "水果", "谷物"]),
         ("mi", ["我"]),
-        ("ye", ["你"])
+        ("ye", ["你"]),
+        ("yo", ["你"])
     ]
 
 verbDictionary :: LexicalDictionary
 verbDictionary = [
         ("mani", ["给"]),
+        ("mito", ["知道"]),
         ("muhe", ["喜欢", "爱"])
     ]
 
@@ -33,13 +35,20 @@ adjectiveDictionary = [
         ("dada", ["好"])
     ]
 
+adjectiveSuffix :: String
 adjectiveSuffix = "的"
+
+adjectivePredicatePrefix :: String
+adjectivePredicatePrefix = "很"
 
 adverbDictionary :: LexicalDictionary
 adverbDictionary = [
         ("dada", ["很"]),
         ("nye", ["不"])
     ]
+
+determinatePredicatePrefix :: String
+determinatePredicatePrefix = "是"
 
 determinerDictionary :: LexicalDictionary
 determinerDictionary = [
@@ -75,6 +84,11 @@ instance ToChineseSimplified Sentence where
         vp <- toZhCn verbPhrase
         return $ dp ++ vp
 
+    toZhCn (PredicativeSentence determinatePhrase predicativePhrase) = do
+        dp <- toZhCn determinatePhrase
+        pp <- toZhCn predicativePhrase
+        return $ dp ++ pp
+
 instance ToChineseSimplified DeterminatePhrase where
     toZhCn (DeterminatePhrase nounPhrase (Just determiner)) = do
         np <- toZhCn nounPhrase
@@ -83,7 +97,16 @@ instance ToChineseSimplified DeterminatePhrase where
 
     toZhCn (DeterminatePhrase nounPhrase Nothing) =
         toZhCn nounPhrase
-        
+
+instance ToChineseSimplified PredicativePhrase where
+    toZhCn (DeterminatePredicate determinatePhrase) = do
+        dp <- toZhCn determinatePhrase
+        return $ determinatePredicatePrefix ++ dp
+
+    toZhCn (AdjectivePredicate adjectivePhrase) = do
+        ap <- toZhCn adjectivePhrase
+        return $ adjectivePredicatePrefix ++ ap
+
 instance ToChineseSimplified NounPhrase where
     toZhCn (NounPhrase noun (Just adjectivePhrase) _) = do
         n <- toZhCn noun
@@ -106,7 +129,7 @@ instance ToChineseSimplified VerbPhrase where
     toZhCn (VerbIntransitivePhrase verb (Just adverb)) = do
         v <- toZhCn verb
         adv <- toZhCn adverb
-        return $ v ++ adv
+        return $ adv ++ v
 
     toZhCn (VerbIntransitivePhrase verb Nothing) =
         toZhCn verb
@@ -135,6 +158,13 @@ instance ToChineseSimplified VerbPhrase where
         np2 <- toZhCn nounPhrase2
         return $ v ++ np1 ++ np2
 
-{-
-Sentences for testing
--}
+    toZhCn (VerbRecursivePhrase verb sentence (Just adverb)) = do
+        v <- toZhCn verb
+        adv <- toZhCn adverb
+        s <- toZhCn sentence
+        return $ adv ++ v ++ s
+
+    toZhCn (VerbRecursivePhrase verb sentence Nothing) = do
+        v <- toZhCn verb
+        s <- toZhCn sentence
+        return $ v ++ s

@@ -24,9 +24,12 @@ iLoveYou = -- Mi muhe ye.
         )
         (VerbTransitivePhrase
             (Verb (Phrase ["muhe"]))
-            (NounPhrase
-                (Noun (Phrase ["ye"]))
-                Nothing
+            (DeterminatePhrase
+                (NounPhrase
+                    (Noun (Phrase ["ye"]))
+                    Nothing
+                    Nothing
+                )
                 Nothing
             )
             Nothing
@@ -44,17 +47,23 @@ iGiveYouARedFruit = -- Mi mani ye gusha celi boya.
         )
         (VerbTransitive2ObjPhrase
             (Verb (Phrase ["mani"]))
-            (NounPhrase
-                (Noun (Phrase ["ye"]))
-                Nothing
+            (DeterminatePhrase
+                (NounPhrase
+                    (Noun (Phrase ["ye"]))
+                    Nothing
+                    Nothing
+                )
                 Nothing
             )
-            (NounPhrase
-                (Noun (Phrase ["gusha"]))
-                (Just (AdjectivePhrase
-                    (Adjective (Phrase ["celi", "boya"]))
+            (DeterminatePhrase
+                (NounPhrase
+                    (Noun (Phrase ["gusha"]))
+                    (Just (AdjectivePhrase
+                        (Adjective (Phrase ["celi", "boya"]))
+                        Nothing
+                    ))
                     Nothing
-                ))
+                )
                 Nothing
             )
             Nothing
